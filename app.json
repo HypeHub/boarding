@@ -33,6 +33,10 @@
     "GA_PROPERTY_ID": {
       "description": "Optional: Configure Google Analytics to track visitors on your website.",
       "required": false
+    },
+    "MIXPANEL_PROJECT_TOKEN": {
+      "description": "Optional: Configure Mixpanel to track signups.",
+      "required": false
     }
   }
 }

@@ -38,8 +38,12 @@ class BoardingService
   end
 
   def add_tester(email, first_name, last_name)
-    tracker = Mixpanel::Tracker.new(ENV["MIXPANEL_PROJECT_TOKEN"])
-    tracker.track(email, 'boardingSignup.submit')
+    if ENV["MIXPANEL_PROJECT_TOKEN"]
+      tracker = Mixpanel::Tracker.new(ENV["MIXPANEL_PROJECT_TOKEN"])
+      tracker.track(email, 'boardingSignup.submit')
+    else
+      tracker = nil
+    end
     
     add_tester_response = AddTesterResponse.new
     add_tester_response.type = "danger"
@@ -47,7 +51,9 @@ class BoardingService
     tester = find_app_tester(email: email, app: app)
     if tester
       add_tester_response.message = t(:message_email_exists)
-      tracker.track(email, 'boardingSignup.alreadyExists')
+      if tracker
+        tracker.track(email, 'boardingSignup.alreadyExists')
+      end
     else
       tester = create_tester(
         email: email,
@@ -61,7 +67,9 @@ class BoardingService
         add_tester_response.message = t(:message_success_pending)
       end
       add_tester_response.type = "success"
-      tracker.track(email, 'boardingSignup.success')
+      if tracker
+        tracker.track(email, 'boardingSignup.success')
+      end
     end
 
     begin
@@ -79,7 +87,9 @@ class BoardingService
       end
 
     rescue => ex
-      tracker.track(email, 'boardingSignup.error')
+      if tracker
+        tracker.track(email, 'boardingSignup.error')
+      end
       Rails.logger.error "Could not add #{tester.email} to app: #{app.name}"
       raise ex
     end
