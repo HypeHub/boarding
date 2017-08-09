@@ -22,6 +22,9 @@ gem 'bootstrap-sass', '~> 3.3.5'
 
 gem 'http_accept_language', '~> 2.0.5'
 
+gem 'mixpanel-ruby', '~> 2.2.0'
+
+
 group :production do
   gem 'puma'
   gem 'rails_12factor'
